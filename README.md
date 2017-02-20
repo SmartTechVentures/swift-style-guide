@@ -162,7 +162,7 @@ class SomeClass {
 悪い例
 
 ```swift
-class SDTSomeClass {
+class STVSomeClass {
 
     ...
 }
