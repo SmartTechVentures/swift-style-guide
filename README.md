@@ -1,7 +1,8 @@
 # Swiftコーディング規約
 
 # バージョン
-v1.0.0
+v2.0.0
+Swift 3 対応版
 
 # 目次
 
@@ -146,7 +147,6 @@ enum SomeEnum {
 **理由**
 
 Swiftでは名前空間が存在するためクラス名は衝突せず、ただ可読性を下げてしまうため。  
-また、Swift3でFoundationAPIsのNSプレフィックスは除去されるため。
 
 **例**
 
@@ -178,16 +178,16 @@ API Design Guidelinesに従う。
 **例**
 
 ```swift
-let url: NSURL = ...
-let thumbnailURL: NSURL = ...
+let url: URL = ...
+let thumbnailURL: URL = ...
 
 let id: String = ...
 let userID: String = ...
 ```
 
 ## urlとdateの命名
-NSURLの場合○○URLを使い、Stringであれば○○URLStringとする。  
-同様にNSDateの場合○○Dateを使い、Stringであれば○○DateStringとする。
+URL型の場合○○URLを使い、String型であれば○○URLStringとする。  
+同様にDate型の場合○○Dateを使い、String型であれば○○DateStringとする。
 
 **理由**
 
@@ -251,10 +251,10 @@ extension UIView {
     @IBInspectable
     var borderColor: UIColor? {
         get {
-            return layer.borderColor.map { UIColor(CGColor: $0) }
+            return layer.borderColor.map { UIColor(cgColor: $0) }
         }
         set {
-            layer.borderColor = newValue?.CGColor
+            layer.borderColor = newValue?.cgColor
         }
     }
 }
@@ -270,10 +270,10 @@ extension UIView {
     @IBInspectable
     var borderColor: UIColor? {
         get {
-            return layer.borderColor.map { UIColor(CGColor: $0) }
+            return layer.borderColor.map { UIColor(cgColor: $0) }
         }
         set {
-            layer.borderColor = newValue?.CGColor
+            layer.borderColor = newValue?.cgColor
         }
     }
 
@@ -326,83 +326,44 @@ final class ViewController: UIViewController {
     // 4.typealias
     // 5.Inner class, enum & struct
 
-    // 6.static member
+    // 6.property
     //
-    // 6-1.property
-    // |
-    // | 6-1-1.public
-    // | |
-    // | | 6-1-1-1.let
-    // | | 6-1-1-2.var
-    // | | 6-1-1-3.computed var
-    // |
-    // | 6-1-2.internal
-    // | |
-    // | | 6-1-2-1.let
-    // | | 6-1-2-2.var
-    // | | 6-1-2-3.computed var
-    // |
-    // | 6-1-3.private
-    // | |
-    // | | 6-1-3-1.let
-    // | | 6-1-3-2.var
-    // | | 6-1-3-3.computed var
+    // open → public → internal → fileprivate → private
     //
-    // 6-2.method
+    // 6-1.static member
     // |
-    // | 6-2-1.public
+    // | 6-1-1.let
     // |
-    // | 6-2-2.internal
+    // | 6-1-2.var
     // |
-    // | 6-2-3.private
+    // | 6-1-3.computed var
+    //
+    // 6-2.instance member
+    // |
+    // | 6-2-1.@~
+    // |
+    // | 6-2-2.let
+    // |
+    // | 6-2-3.var
+    // |
+    // | 6-2-3.computed var
 
-    // 7.instance member
+    // 7.method
     //
-    // 7-1.property
-    // |
-    // | 7-1-1.public
-    // | |
-    // | | 7-1-1-1.@~
-    // | | 7-1-1-2.let
-    // | | 7-1-1-3.var
-    // | | 7-1-1-4.computed var
-    // |
-    // | 7-1-2.internal
-    // | |
-    // | | 7-1-2-1.@~
-    // | | 7-1-2-2.let
-    // | | 7-1-2-3.var
-    // | | 7-1-2-4.computed var
-    // |
-    // | 7-1-3.private
-    // | |
-    // | | 7-1-3-1.@~
-    // | | 7-1-3-2.let
-    // | | 7-1-3-3.var
-    // | | 7-1-3-4.computed var
+    // open → public → internal → fileprivate → private
     //
-    // 7-2.method
+    // 7-1.static member
+    //
+    // 7-2.instance member
     // |
-    // | 7-2-1.public
-    // | |
-    // | | 7-2-1-1.init
-    // | | 7-2-1-2.life cycle
-    // | | 7-2-1-3.@~
-    // | | 7-2-1-4.others
+    // | 7-2-1.init
     // |
-    // | 7-2-2.internal
-    // | |
-    // | | 7-2-2-1.init
-    // | | 7-2-2-2.life cycle
-    // | | 7-2-2-3.@~
-    // | | 7-2-2-4.others
+    // | 7-2-2.life cycle
     // |
-    // | 7-2-3.private
-    // | |
-    // | | 7-2-2-1.init
-    // | | 7-2-2-2.life cycle
-    // | | 7-2-2-3.@~
-    // | | 7-2-2-4.others
+    // | 7-2-3.@~
+    // |
+    // | 7-2-3.others
+
 }
 
 // 8.extension
@@ -751,14 +712,14 @@ let name: String = "KentaKudo"
 
 ```swift
 var names = [String]()
-var jsonDic = [String: AnyObject]()
+var jsonDic = [String: Any]()
 ```
 
 悪い例
 
 ```swift
 var names: [String] = []
-var jsonDic: [String: AnyObject] = [:]
+var jsonDic: [String: Any] = [:]
 ```
 
 ## 糖衣構文の使用
@@ -775,7 +736,7 @@ Voidに関しては、可読性を理由に例外を認める。
 
 ```swift
 var names: [String]
-var jsonDic: [String: AnyObject]
+var jsonDic: [String: Any]
 var title: String?
 var someClosure: () -> ()
 ```
@@ -784,7 +745,7 @@ var someClosure: () -> ()
 
 ```swift
 var names: Array<String>
-var jsonDic: Dictionary<String, AnyObject>
+var jsonDic: Dictionary<String, Any>
 var title: Optional<String>
 var someClosure: Void -> Void
 ```
@@ -801,18 +762,6 @@ Swiftネイティブな型を利用すること。
 swiftの型で統一するため。
 
 # 制御構文
-
-## 条件式for loop
-使用禁止とする。  
-for in を使うこと。
-
-**理由**
-
-swift3でdeprecatedとなるため。
-
-**備考**
-
-swift3移行後は項目を削除する。
 
 ## 早期Return
 guard文を利用し、例外の場合に早めに制御を返すこと。
@@ -841,19 +790,6 @@ if hogehoge {
     return
 }
 ```
-
-# 演算子
-
-## インクリメント、デクリメント
-使用禁止とする。
-
-**理由**
-
-Swift3でdeprecatedとなるため。
-
-**備考**
-
-swift3移行後に項目を削除する。
 
 # エラーハンドリング・オプショナル
 
@@ -888,8 +824,8 @@ final class ViewController: UIViewController {
 ```
 
 ```swift:GoodOptionalBinding.swift
-let response: AnyObject = [:]
-if let json = response as? [String: AnyObject] {
+let response: Any = [:]
+if let json = response as? [String: Any] {
     ...
 }
 ```
@@ -917,8 +853,8 @@ final class ViewController: UIViewController {
 ```
 
 ```swift:BadOptionalBinding.swift
-let response: AnyObject = [:]
-let json = response as! [String: AnyObject]
+let response: Any = [:]
+let json = response as! [String: Any]
 ```
 
 ```swift:BadNilCoalescing.swift
@@ -1036,17 +972,6 @@ warningを可能な限り解消すること。
 **却下理由**
 
 Xcodeに関する事項であり、コーディングの規約としては不適切と判断した。
-
-## 第一引数の明記
-第一引数について、必要な場合は外部引数名を使うこと。
-
-**却下理由**
-
-swift3では第一引数にデフォルトで外部引数名がつくため。
-
-**備考**
-
-swift3に移行後は項目を削除する。
 
 ## 関数型のメソッドに関する制約
 関数型の使用を制限する。
