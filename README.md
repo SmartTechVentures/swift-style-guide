@@ -18,6 +18,7 @@ Swift 3 対応版
 - [演算子](#演算子)
 - [エラーハンドリング・オプショナル](#エラーハンドリング・オプショナル)
 - [クロージャー](#クロージャー)
+- [不要なコード削除](#不要なコード削除)
 - [規約外とした項目](#規約外とした項目)
 
 # はじめに
@@ -875,12 +876,18 @@ if let bindedSome = some {
 
 nilアクセスの可能性をできるだけ下げるため。
 
+[weak self]・・・弱参照先がメモリ解放されている場合にnilになる（Optional型と同様にアンラップが必要）
+[unowned self]・・・Optional型ではないため、弱参照先がメモリ解放されている場合にクラッシュする
+
 **例**
 
 良い例
 
 ```swift
 someFunc { [weak self] in
+  guard let self = self {
+    return
+  }
     ...
 }
 ```
@@ -917,8 +924,11 @@ let someInt = try! someErrorThrowMethod()
 # クロージャー
 
 ## クロージャーの表記
-一行で記述する場合に限り、引数名を省略すること。  
-メソッドが複数のクロージャを引数にとる場合、trailingクロージャの省略形を使用しないこと。
+
+①関数の最後の引数として関数にクロージャを渡す必要があって、かつクロージャが１つの場合には後置クロージャを使用する。
+　またクロージャ内のパラメータは明確に意味がわかるようにする。（一行で記述する場合に限り、引数名を省略すること。）
+②クロージャが関数やメソッドの唯一の引数の場合は、関数名やメソッド名の後ろの（）を省略する。
+③後置クロージャを持つメソッドでメソッドチェーンで記述する場合は、スペースを入れる or 改行するで統一する。
 
 **理由**
 
@@ -938,13 +948,19 @@ let someClosure: String -> Int? = { string in
     return intValue
 }
 
-UIView.animateWithDuration(10.0,
-                           animations: {
-                               print("animate")
-                           },
-                           completion: { _ in
-                               print("completed")
-                           })
+UIView.animate(withDuration: 10.0) {
+        print("animate")
+}
+
+UIView.animate(withDuration: 10.0,
+                 animations: {
+                      print("animate")
+                 },
+                 completion: { _ in
+                      print("completed")
+                 })
+
+let value = numbers.map {$0 * 2}.filter {$0 > 50}.map {$0 + 10}
 ```
 
 悪い例
@@ -956,12 +972,29 @@ let someClosure: String -> Int? = {
     return intValue
 }
 
-UIView.animateWithDuration(10.0,
-                           animations: {
-                               print("animate")
-                           }) { _ in
-                              print("competed")
-                           }
+UIView.animate(withDuration: 10.0, animations:{
+        print("animate")  
+})
+
+UIView.animate(withDuration: 10.0,
+                 animations: {
+                      print("animate")
+                 }) { _ in
+                      print("competed")
+                 }
+```
+
+# 不要なコード削除
+　テンプレートで実装されているメソッドやコメントで不要なコードは削除する
+
+**例**
+
+```swift
+override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
 ```
 
 # 規約外とした項目
