@@ -692,12 +692,30 @@ letを使用することでプログラマーが値が変わらないことを�
 
 ```swift
 let name = "KentaKudo"
+
+let image = UIImage(named: "test")
+
+view.backgroundColor = .blue
+
+let view = UIView(frame: .zero)
+
+※数値を扱う場合は注意
+
+let int = 1       // Int型
+
+let double = 1.0  // Double型
 ```
 
 悪い例
 
 ```swift
 let name: String = "KentaKudo"
+
+let image: UIImage = UIImage(named: "test")!
+
+view.backgroundColor = UIColor.blue
+
+let view = UIView(frame: CGRect.zero)
 ```
 
 ## 空配列・空辞書の初期化
