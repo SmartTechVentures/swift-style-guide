@@ -19,6 +19,7 @@ Swift 3 対応版
 - [エラーハンドリング・オプショナル](#エラーハンドリング・オプショナル)
 - [クロージャー](#クロージャー)
 - [不要なコード削除](#不要なコード削除)
+- [ジェネリクス](#ジェネリクス)
 - [規約外とした項目](#規約外とした項目)
 
 # はじめに
@@ -456,12 +457,14 @@ func <|<<A>(lhs: A,rhs: A)->A
 ```
 
 ## プロトコルの実装
-ひとつのextensionで実装するプロトコルは１つとする。  
-また、継承とプロトコルの準拠を同時に行わないこと。
+①ひとつのextensionで実装するプロトコルは１つとする。  
+②可能な限り継承よりもプロトコルを使用すること。
 
 **理由**
 
-関連メソッドをグルーピングすることで可読性を上げるため。
+①関連メソッドをグルーピングすることで可読性を上げるため。  
+②継承は構造体で利用できないため。  
+　また、継承可能なのは１つのクラスのみであるのに対し、プロトコルは複数適用可能であるため。  
 
 **例**
 
@@ -1012,6 +1015,42 @@ override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
+```
+
+# ジェネリクス
+　可能な限りジェネリクスを活用すること  
+
+**理由**
+
+汎用性が高まるため、またコード量を削減できるため。  
+
+**例**
+Tupleを作成するメソッド  
+
+良い例
+
+```swift
+
+func makeTuple<T> (a: T, b: T) -> (T, T) {
+        return (a, b)
+}
+
+```
+
+悪い例
+
+```swift
+
+// Intの場合
+func makeTuple (a: Int, b: Int) -> (Int, Int) {
+        return (a, b)
+}
+
+// Stringの場合
+func makeTuple (a: String, b: String) -> (String, String) {
+        return (a, b)
+}
 
 ```
 
