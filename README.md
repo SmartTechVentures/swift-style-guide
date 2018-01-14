@@ -20,6 +20,7 @@ Swift 3 対応版
 - [クロージャー](#クロージャー)
 - [不要なコード削除](#不要なコード削除)
 - [ジェネリクス](#ジェネリクス)
+- [メモリ管理](#メモリ管理)
 - [規約外とした項目](#規約外とした項目)
 
 # はじめに
@@ -890,37 +891,6 @@ if let bindedSome = some {
 }
 ```
 
-## 弱参照
-弱参照をする際にはunownedではなくweakを使用すること。
-
-**理由**
-
-nilアクセスの可能性をできるだけ下げるため。
-
-[weak self]・・・弱参照先がメモリ解放されている場合にnilになる（Optional型と同様にアンラップが必要）  
-[unowned self]・・・Optional型ではないため、弱参照先がメモリ解放されている場合にクラッシュする  
-
-**例**
-
-良い例
-
-```swift
-someFunc { [weak self] in
-  guard let self = self {
-    return
-  }
-    ...
-}
-```
-
-悪い例
-
-```swift
-someFunc { [unowned self] in
-    ...
-}
-```
-
 ## try~catch
 catchで例外を処理しない場合はtry!ではなく、try?を使用する。
 
@@ -953,8 +923,11 @@ let someInt = try! someErrorThrowMethod()
 
 **理由**
 
-複数行のクロージャ内で引数名を省略した場合に可読性が落ちるため。  
-複数のクロージャを引数にするメソッドの呼び出しでtrailingクロージャの省略形を使うと、外部引数名が省略され、可読性が落ちるため。
+①複数のクロージャを引数にもつ場合に後置クロージャを使用すると可読性が落ちるため。  
+　複数行のクロージャ内で引数名を省略した場合に可読性が落ちるため。  
+　複数のクロージャを引数にするメソッドの呼び出しでtrailingクロージャの省略形を使うと、外部引数名が省略され、可読性が落ちるため。  
+②省略可能なため。  
+③実装者によって記述が異なることを防ぐため。  
 
 **例**
 
@@ -1006,6 +979,8 @@ UIView.animate(withDuration: 10.0,
 ```
 
 # 不要なコード削除
+
+## 不要なコードの削除
 　テンプレートで実装されているメソッドやコメントで不要なコードは削除する
 
 **例**
@@ -1019,6 +994,8 @@ override func didReceiveMemoryWarning() {
 ```
 
 # ジェネリクス
+
+## ジェネリクスの活用
 　可能な限りジェネリクスを活用すること  
 
 **理由**
@@ -1052,6 +1029,57 @@ func makeTuple (a: String, b: String) -> (String, String) {
         return (a, b)
 }
 
+```
+
+# メモリ管理
+
+## 弱参照
+弱参照をする際にはunownedではなくweakを使用すること。
+
+**理由**
+
+nilアクセスの可能性をできるだけ下げるため。
+
+[weak self]・・・弱参照先がメモリ解放されている場合にnilになる（Optional型と同様にアンラップが必要）  
+[unowned self]・・・Optional型ではないため、弱参照先がメモリ解放されている場合にクラッシュする  
+
+**例**
+
+良い例
+
+```swift
+someFunc { [weak self] in
+  guard let `self` = self {
+    return
+  }
+  let sampleTuple = self.makeTuple(a: "A", b: "B")
+  print(sampleTuple)
+    ...
+}
+
+someFunc { [weak self] in
+  if let `self` = self {
+    let sampleTuple = self.makeTuple(a: "A", b: "B")
+    print(sampleTuple)
+  } else {
+    print("Error")
+  }
+    ...
+}
+```
+
+悪い例
+
+```swift
+someFunc { [weak self] in
+  let sampleTuple = self?.makeTuple(a: "A", b: "B")
+  print(sampleTuple!)
+    ...
+}
+
+someFunc { [unowned self] in
+    ...
+}
 ```
 
 # 規約外とした項目
