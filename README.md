@@ -695,7 +695,7 @@ letを使用することでプログラマーが値が変わらないことを�
 良い例
 
 ```swift
-let name = "KentaKudo"
+let name = "sample"
 
 let image = UIImage(named: "test")
 
@@ -703,23 +703,41 @@ view.backgroundColor = .blue
 
 let view = UIView(frame: .zero)
 
+enum CustomResult {
+    case Success
+    case Error
+}
+var result:CustomResult?
+result = .Success
+
+let selector = #selector(viewWillAppear)
+
 ※数値を扱う場合は注意
+let int = 1            // Int型
 
-let int = 1       // Int型
-
-let double = 1.0  // Double型
+let double = 1.0       // Double型
+let float:Float = 1.0  // Float型にしたい場合は明記する
 ```
 
 悪い例
 
 ```swift
-let name: String = "KentaKudo"
+let name: String = "sample"
 
 let image: UIImage = UIImage(named: "test")!
 
 view.backgroundColor = UIColor.blue
 
 let view = UIView(frame: CGRect.zero)
+
+enum CustomResult {
+    case Success
+    case Error
+}
+var result:CustomResult?
+result = CustomResult.Success
+
+let selector = #selector(ViewController.viewWillAppear)
 ```
 
 ## 空配列・空辞書の初期化
