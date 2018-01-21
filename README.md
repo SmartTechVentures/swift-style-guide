@@ -1,7 +1,8 @@
 # Swiftコーディング規約
 
 # バージョン
-v1.0.0
+v3.0.0  
+Swift 4 対応版
 
 # 目次
 
@@ -17,6 +18,9 @@ v1.0.0
 - [演算子](#演算子)
 - [エラーハンドリング・オプショナル](#エラーハンドリング・オプショナル)
 - [クロージャー](#クロージャー)
+- [不要なコード削除](#不要なコード削除)
+- [ジェネリクス](#ジェネリクス)
+- [メモリ管理](#メモリ管理)
 - [規約外とした項目](#規約外とした項目)
 
 # はじめに
@@ -146,7 +150,6 @@ enum SomeEnum {
 **理由**
 
 Swiftでは名前空間が存在するためクラス名は衝突せず、ただ可読性を下げてしまうため。  
-また、Swift3でFoundationAPIsのNSプレフィックスは除去されるため。
 
 **例**
 
@@ -178,16 +181,16 @@ API Design Guidelinesに従う。
 **例**
 
 ```swift
-let url: NSURL = ...
-let thumbnailURL: NSURL = ...
+let url: URL = ...
+let thumbnailURL: URL = ...
 
 let id: String = ...
 let userID: String = ...
 ```
 
 ## urlとdateの命名
-NSURLの場合○○URLを使い、Stringであれば○○URLStringとする。  
-同様にNSDateの場合○○Dateを使い、Stringであれば○○DateStringとする。
+URL型の場合○○URLを使い、String型であれば○○URLStringとする。  
+同様にDate型の場合○○Dateを使い、String型であれば○○DateStringとする。
 
 **理由**
 
@@ -251,10 +254,10 @@ extension UIView {
     @IBInspectable
     var borderColor: UIColor? {
         get {
-            return layer.borderColor.map { UIColor(CGColor: $0) }
+            return layer.borderColor.map { UIColor(cgColor: $0) }
         }
         set {
-            layer.borderColor = newValue?.CGColor
+            layer.borderColor = newValue?.cgColor
         }
     }
 }
@@ -270,10 +273,10 @@ extension UIView {
     @IBInspectable
     var borderColor: UIColor? {
         get {
-            return layer.borderColor.map { UIColor(CGColor: $0) }
+            return layer.borderColor.map { UIColor(cgColor: $0) }
         }
         set {
-            layer.borderColor = newValue?.CGColor
+            layer.borderColor = newValue?.cgColor
         }
     }
 
@@ -326,83 +329,44 @@ final class ViewController: UIViewController {
     // 4.typealias
     // 5.Inner class, enum & struct
 
-    // 6.static member
+    // 6.property
     //
-    // 6-1.property
-    // |
-    // | 6-1-1.public
-    // | |
-    // | | 6-1-1-1.let
-    // | | 6-1-1-2.var
-    // | | 6-1-1-3.computed var
-    // |
-    // | 6-1-2.internal
-    // | |
-    // | | 6-1-2-1.let
-    // | | 6-1-2-2.var
-    // | | 6-1-2-3.computed var
-    // |
-    // | 6-1-3.private
-    // | |
-    // | | 6-1-3-1.let
-    // | | 6-1-3-2.var
-    // | | 6-1-3-3.computed var
+    // open → public → internal → fileprivate → private
     //
-    // 6-2.method
+    // 6-1.static member
     // |
-    // | 6-2-1.public
+    // | 6-1-1.let
     // |
-    // | 6-2-2.internal
+    // | 6-1-2.var
     // |
-    // | 6-2-3.private
+    // | 6-1-3.computed var
+    //
+    // 6-2.instance member
+    // |
+    // | 6-2-1.@~
+    // |
+    // | 6-2-2.let
+    // |
+    // | 6-2-3.var
+    // |
+    // | 6-2-3.computed var
 
-    // 7.instance member
+    // 7.method
     //
-    // 7-1.property
-    // |
-    // | 7-1-1.public
-    // | |
-    // | | 7-1-1-1.@~
-    // | | 7-1-1-2.let
-    // | | 7-1-1-3.var
-    // | | 7-1-1-4.computed var
-    // |
-    // | 7-1-2.internal
-    // | |
-    // | | 7-1-2-1.@~
-    // | | 7-1-2-2.let
-    // | | 7-1-2-3.var
-    // | | 7-1-2-4.computed var
-    // |
-    // | 7-1-3.private
-    // | |
-    // | | 7-1-3-1.@~
-    // | | 7-1-3-2.let
-    // | | 7-1-3-3.var
-    // | | 7-1-3-4.computed var
+    // open → public → internal → fileprivate → private
     //
-    // 7-2.method
+    // 7-1.static member
+    //
+    // 7-2.instance member
     // |
-    // | 7-2-1.public
-    // | |
-    // | | 7-2-1-1.init
-    // | | 7-2-1-2.life cycle
-    // | | 7-2-1-3.@~
-    // | | 7-2-1-4.others
+    // | 7-2-1.init
     // |
-    // | 7-2-2.internal
-    // | |
-    // | | 7-2-2-1.init
-    // | | 7-2-2-2.life cycle
-    // | | 7-2-2-3.@~
-    // | | 7-2-2-4.others
+    // | 7-2-2.life cycle
     // |
-    // | 7-2-3.private
-    // | |
-    // | | 7-2-2-1.init
-    // | | 7-2-2-2.life cycle
-    // | | 7-2-2-3.@~
-    // | | 7-2-2-4.others
+    // | 7-2-3.@~
+    // |
+    // | 7-2-3.others
+
 }
 
 // 8.extension
@@ -446,17 +410,6 @@ let, var
 コンフリクトを防止するため。  
 順序を揃えることで可読性を上げるため。
 
-## 使われていないコードの削除
-- 使われていないコード
-- スーパークラスを呼び出すだけのコード
-- Xcodeのテンプレートとして書かれたままのコード
-
-は削除する。
-
-**理由**
-
-無用なコードは可読性を下げるため。
-
 ## スペース
 
 - ブラケットの前後には半角スペースを1つおくこと。
@@ -494,12 +447,13 @@ func <|<<A>(lhs: A,rhs: A)->A
 ```
 
 ## プロトコルの実装
-ひとつのextensionで実装するプロトコルは１つとする。  
-また、継承とプロトコルの準拠を同時に行わないこと。
+①ひとつのextensionで実装するプロトコルは１つとする。  
+②可能な限り継承よりもプロトコルを使用すること。
 
 **理由**
 
-関連メソッドをグルーピングすることで可読性を上げるため。
+①関連メソッドをグルーピングすることで可読性を上げるため。  
+②継承は構造体で利用できないため。また、継承可能なのは１つのクラスのみであるのに対し、プロトコルは複数適用可能であるため。  
 
 **例**
 
@@ -729,13 +683,48 @@ letを使用することでプログラマーが値が変わらないことを�
 良い例
 
 ```swift
-let name = "KentaKudo"
+let name = "sample"
+
+let image = UIImage(named: "test")
+
+view.backgroundColor = .blue
+
+let view = UIView(frame: .zero)
+
+enum CustomResult {
+    case Success
+    case Error
+}
+var result: CustomResult?
+result = .Success
+
+let selector = #selector(viewWillAppear)
+
+※数値を扱う場合は注意
+let int = 1            // Int型
+let double = 1.0       // Double型
+let float:Float = 1.0  // Float型にしたい場合は明記する
 ```
 
 悪い例
 
 ```swift
-let name: String = "KentaKudo"
+let name: String = "sample"
+
+let image: UIImage = UIImage(named: "test")!
+
+view.backgroundColor = UIColor.blue
+
+let view = UIView(frame: CGRect.zero)
+
+enum CustomResult {
+    case Success
+    case Error
+}
+var result: CustomResult?
+result = CustomResult.Success
+
+let selector = #selector(ViewController.viewWillAppear)
 ```
 
 ## 空配列・空辞書の初期化
@@ -751,14 +740,14 @@ let name: String = "KentaKudo"
 
 ```swift
 var names = [String]()
-var jsonDic = [String: AnyObject]()
+var jsonDic = [String: Any]()
 ```
 
 悪い例
 
 ```swift
 var names: [String] = []
-var jsonDic: [String: AnyObject] = [:]
+var jsonDic: [String: Any] = [:]
 ```
 
 ## 糖衣構文の使用
@@ -775,7 +764,7 @@ Voidに関しては、可読性を理由に例外を認める。
 
 ```swift
 var names: [String]
-var jsonDic: [String: AnyObject]
+var jsonDic: [String: Any]
 var title: String?
 var someClosure: () -> ()
 ```
@@ -784,7 +773,7 @@ var someClosure: () -> ()
 
 ```swift
 var names: Array<String>
-var jsonDic: Dictionary<String, AnyObject>
+var jsonDic: Dictionary<String, Any>
 var title: Optional<String>
 var someClosure: Void -> Void
 ```
@@ -801,18 +790,6 @@ Swiftネイティブな型を利用すること。
 swiftの型で統一するため。
 
 # 制御構文
-
-## 条件式for loop
-使用禁止とする。  
-for in を使うこと。
-
-**理由**
-
-swift3でdeprecatedとなるため。
-
-**備考**
-
-swift3移行後は項目を削除する。
 
 ## 早期Return
 guard文を利用し、例外の場合に早めに制御を返すこと。
@@ -841,19 +818,6 @@ if hogehoge {
     return
 }
 ```
-
-# 演算子
-
-## インクリメント、デクリメント
-使用禁止とする。
-
-**理由**
-
-Swift3でdeprecatedとなるため。
-
-**備考**
-
-swift3移行後に項目を削除する。
 
 # エラーハンドリング・オプショナル
 
@@ -888,8 +852,8 @@ final class ViewController: UIViewController {
 ```
 
 ```swift:GoodOptionalBinding.swift
-let response: AnyObject = [:]
-if let json = response as? [String: AnyObject] {
+let response: Any = [:]
+if let json = response as? [String: Any] {
     ...
 }
 ```
@@ -917,8 +881,8 @@ final class ViewController: UIViewController {
 ```
 
 ```swift:BadOptionalBinding.swift
-let response: AnyObject = [:]
-let json = response as! [String: AnyObject]
+let response: Any = [:]
+let json = response as! [String: Any]
 ```
 
 ```swift:BadNilCoalescing.swift
@@ -928,31 +892,6 @@ let otherNumber: Int = someNumber!
 
 ```swift:BadBindingNaming.swift
 if let bindedSome = some {
-    ...
-}
-```
-
-## 弱参照
-弱参照をする際にはunownedではなくweakを使用すること。
-
-**理由**
-
-nilアクセスの可能性をできるだけ下げるため。
-
-**例**
-
-良い例
-
-```swift
-someFunc { [weak self] in
-    ...
-}
-```
-
-悪い例
-
-```swift
-someFunc { [unowned self] in
     ...
 }
 ```
@@ -981,13 +920,20 @@ let someInt = try! someErrorThrowMethod()
 # クロージャー
 
 ## クロージャーの表記
-一行で記述する場合に限り、引数名を省略すること。  
-メソッドが複数のクロージャを引数にとる場合、trailingクロージャの省略形を使用しないこと。
+
+①関数の最後の引数として関数にクロージャを渡す必要があって、かつクロージャが１つの場合には後置クロージャを使用する。  
+　またクロージャ内のパラメータは明確に意味がわかるようにする。（一行で記述する場合に限り、引数名を省略すること。）  
+②クロージャが関数やメソッドの唯一の引数の場合は、関数名やメソッド名の後ろの（）を省略する。  
+③後置クロージャを持つメソッドでメソッドチェーンで記述する場合は、スペースを入れる or 改行するで統一する。  
 
 **理由**
 
-複数行のクロージャ内で引数名を省略した場合に可読性が落ちるため。  
-複数のクロージャを引数にするメソッドの呼び出しでtrailingクロージャの省略形を使うと、外部引数名が省略され、可読性が落ちるため。
+①複数のクロージャを引数にもつ場合に後置クロージャを使用すると可読性が落ちるため。  
+　複数行のクロージャ内で引数名を省略した場合に可読性が落ちるため。  
+　複数のクロージャを引数にするメソッドの呼び出しでtrailingクロージャの省略形を使うと、外部引数名が省略され、  
+　可読性が落ちるため。  
+②省略可能なため。  
+③実装者によって記述が異なることを防ぐため。  
 
 **例**
 
@@ -1002,13 +948,19 @@ let someClosure: String -> Int? = { string in
     return intValue
 }
 
-UIView.animateWithDuration(10.0,
-                           animations: {
-                               print("animate")
-                           },
-                           completion: { _ in
-                               print("completed")
-                           })
+UIView.animate(withDuration: 10.0) {
+    print("animate")
+}
+
+UIView.animate(withDuration: 10.0,
+               animations: {
+                print("animate")
+},
+               completion: { _ in
+                print("completed")
+})
+
+let value = numbers.map {$0 * 2}.filter {$0 > 50}.map {$0 + 10}
 ```
 
 悪い例
@@ -1020,12 +972,120 @@ let someClosure: String -> Int? = {
     return intValue
 }
 
-UIView.animateWithDuration(10.0,
-                           animations: {
-                               print("animate")
-                           }) { _ in
-                              print("competed")
-                           }
+UIView.animate(withDuration: 10.0, animations:{
+    print("animate")  
+})
+
+UIView.animate(withDuration: 10.0,
+               animations: {
+                print("animate")
+}) { _ in
+    print("competed")
+}
+```
+
+# 不要なコード削除
+
+## 不要なコードの削除
+テンプレートで実装されているメソッドやコメントで不要なコードは削除する
+
+**例**
+
+```swift
+override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    // Dispose of any resources that can be recreated.
+}
+
+```
+
+# ジェネリクス
+
+## ジェネリクスの活用
+可能な限りジェネリクスを活用すること  
+
+**理由**
+
+汎用性が高まるため、またコード量を削減できるため。  
+
+**例**
+Tupleを作成するメソッド  
+
+良い例
+
+```swift
+
+func makeTuple<T> (a: T, b: T) -> (T, T) {
+    return (a, b)
+}
+
+```
+
+悪い例
+
+```swift
+
+// Intの場合
+func makeTuple (a: Int, b: Int) -> (Int, Int) {
+    return (a, b)
+}
+
+// Stringの場合
+func makeTuple (a: String, b: String) -> (String, String) {
+    return (a, b)
+}
+
+```
+
+# メモリ管理
+
+## 弱参照
+弱参照をする際にはunownedではなくweakを使用すること。
+
+**理由**
+
+nilアクセスの可能性をできるだけ下げるため。
+
+[weak self]・・・弱参照先がメモリ解放されている場合にnilになる（Optional型と同様にアンラップが必要）  
+[unowned self]・・・Optional型ではないため、弱参照先がメモリ解放されている場合にクラッシュする  
+
+**例**
+
+良い例
+
+```swift
+someFunc { [weak self] in
+    guard let weakSelf = self {
+      return
+    }
+    let sampleTuple = weakSelf.makeTuple(a: "A", b: "B")
+    print(sampleTuple)
+    ...
+}
+
+someFunc { [weak self] in
+    if let weakSelf = self {
+      let sampleTuple = weakSelf.makeTuple(a: "A", b: "B")
+      print(sampleTuple)
+    } else {
+      print("Error")
+    }
+    ...
+}
+```
+
+悪い例
+
+```swift
+someFunc { [weak self] in
+    let sampleTuple = self?.makeTuple(a: "A", b: "B")
+    print(sampleTuple!)
+    ...
+}
+
+someFunc { [unowned self] in
+    ...
+}
 ```
 
 # 規約外とした項目
@@ -1036,17 +1096,6 @@ warningを可能な限り解消すること。
 **却下理由**
 
 Xcodeに関する事項であり、コーディングの規約としては不適切と判断した。
-
-## 第一引数の明記
-第一引数について、必要な場合は外部引数名を使うこと。
-
-**却下理由**
-
-swift3では第一引数にデフォルトで外部引数名がつくため。
-
-**備考**
-
-swift3に移行後は項目を削除する。
 
 ## 関数型のメソッドに関する制約
 関数型の使用を制限する。
