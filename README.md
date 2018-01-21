@@ -410,17 +410,6 @@ let, var
 コンフリクトを防止するため。  
 順序を揃えることで可読性を上げるため。
 
-## 使われていないコードの削除
-- 使われていないコード
-- スーパークラスを呼び出すだけのコード
-- Xcodeのテンプレートとして書かれたままのコード
-
-は削除する。
-
-**理由**
-
-無用なコードは可読性を下げるため。
-
 ## スペース
 
 - ブラケットの前後には半角スペースを1つおくこと。
@@ -464,8 +453,7 @@ func <|<<A>(lhs: A,rhs: A)->A
 **理由**
 
 ①関連メソッドをグルーピングすることで可読性を上げるため。  
-②継承は構造体で利用できないため。  
-　また、継承可能なのは１つのクラスのみであるのに対し、プロトコルは複数適用可能であるため。  
+②継承は構造体で利用できないため。また、継承可能なのは１つのクラスのみであるのに対し、プロトコルは複数適用可能であるため。  
 
 **例**
 
@@ -714,7 +702,6 @@ let selector = #selector(viewWillAppear)
 
 ※数値を扱う場合は注意
 let int = 1            // Int型
-
 let double = 1.0       // Double型
 let float:Float = 1.0  // Float型にしたい場合は明記する
 ```
@@ -962,16 +949,16 @@ let someClosure: String -> Int? = { string in
 }
 
 UIView.animate(withDuration: 10.0) {
-        print("animate")
+    print("animate")
 }
 
 UIView.animate(withDuration: 10.0,
-                 animations: {
-                      print("animate")
-                 },
-                 completion: { _ in
-                      print("completed")
-                 })
+               animations: {
+                print("animate")
+},
+               completion: { _ in
+                print("completed")
+})
 
 let value = numbers.map {$0 * 2}.filter {$0 > 50}.map {$0 + 10}
 ```
@@ -986,15 +973,15 @@ let someClosure: String -> Int? = {
 }
 
 UIView.animate(withDuration: 10.0, animations:{
-        print("animate")  
+    print("animate")  
 })
 
 UIView.animate(withDuration: 10.0,
-                 animations: {
-                      print("animate")
-                 }) { _ in
-                      print("competed")
-                 }
+               animations: {
+                print("animate")
+}) { _ in
+    print("competed")
+}
 ```
 
 # 不要なコード削除
@@ -1006,9 +993,9 @@ UIView.animate(withDuration: 10.0,
 
 ```swift
 override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    super.didReceiveMemoryWarning()
+    // Dispose of any resources that can be recreated.
+}
 
 ```
 
@@ -1029,7 +1016,7 @@ Tupleを作成するメソッド
 ```swift
 
 func makeTuple<T> (a: T, b: T) -> (T, T) {
-        return (a, b)
+    return (a, b)
 }
 
 ```
@@ -1040,12 +1027,12 @@ func makeTuple<T> (a: T, b: T) -> (T, T) {
 
 // Intの場合
 func makeTuple (a: Int, b: Int) -> (Int, Int) {
-        return (a, b)
+    return (a, b)
 }
 
 // Stringの場合
 func makeTuple (a: String, b: String) -> (String, String) {
-        return (a, b)
+    return (a, b)
 }
 
 ```
@@ -1068,21 +1055,21 @@ nilアクセスの可能性をできるだけ下げるため。
 
 ```swift
 someFunc { [weak self] in
-  guard let `self` = self {
-    return
-  }
-  let sampleTuple = self.makeTuple(a: "A", b: "B")
-  print(sampleTuple)
+    guard let weakSelf = self {
+      return
+    }
+    let sampleTuple = weakSelf.makeTuple(a: "A", b: "B")
+    print(sampleTuple)
     ...
 }
 
 someFunc { [weak self] in
-  if let `self` = self {
-    let sampleTuple = self.makeTuple(a: "A", b: "B")
-    print(sampleTuple)
-  } else {
-    print("Error")
-  }
+    if let weakSelf = self {
+      let sampleTuple = weakSelf.makeTuple(a: "A", b: "B")
+      print(sampleTuple)
+    } else {
+      print("Error")
+    }
     ...
 }
 ```
@@ -1091,8 +1078,8 @@ someFunc { [weak self] in
 
 ```swift
 someFunc { [weak self] in
-  let sampleTuple = self?.makeTuple(a: "A", b: "B")
-  print(sampleTuple!)
+    let sampleTuple = self?.makeTuple(a: "A", b: "B")
+    print(sampleTuple!)
     ...
 }
 
