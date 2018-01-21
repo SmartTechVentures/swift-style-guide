@@ -695,7 +695,7 @@ enum CustomResult {
     case Success
     case Error
 }
-var result:CustomResult?
+var result: CustomResult?
 result = .Success
 
 let selector = #selector(viewWillAppear)
@@ -721,7 +721,7 @@ enum CustomResult {
     case Success
     case Error
 }
-var result:CustomResult?
+var result: CustomResult?
 result = CustomResult.Success
 
 let selector = #selector(ViewController.viewWillAppear)
@@ -987,7 +987,7 @@ UIView.animate(withDuration: 10.0,
 # 不要なコード削除
 
 ## 不要なコードの削除
-　テンプレートで実装されているメソッドやコメントで不要なコードは削除する
+テンプレートで実装されているメソッドやコメントで不要なコードは削除する
 
 **例**
 
@@ -1002,7 +1002,7 @@ override func didReceiveMemoryWarning() {
 # ジェネリクス
 
 ## ジェネリクスの活用
-　可能な限りジェネリクスを活用すること  
+可能な限りジェネリクスを活用すること  
 
 **理由**
 
