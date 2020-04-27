@@ -106,7 +106,7 @@ struct SomeStruct {
         ...
     }
 
-    // 副作用がない場合は同士として命名
+    // 副作用がない場合は動詞として命名
     func sort() {
         ...
     }
@@ -473,6 +473,7 @@ func <|<<A>(lhs: A,rhs: A)->A
 <tr>
 <td><pre lang=swift>
 final class ViewController: UIViewController {
+
     override func viewDidLoad() {
         // ...
     }
@@ -485,6 +486,7 @@ final class ViewController: UIViewController {
 </pre></td>
 <td><pre lang=swift>
 final class ViewController: UIViewController {
+
     override func viewDidLoad() {
         // ...
     }
